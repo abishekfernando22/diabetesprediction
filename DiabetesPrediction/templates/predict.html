@@ -6,79 +6,244 @@
     <meta charset="UTF-8">
     <title>Prediction Page</title>
     <style>
-      body {
+        body {
+            margin: 0;
+            padding: 0;
+            font-family: Arial, sans-serif;
             background-image: url("{% static '/DiabetesPrediction/images/predictimage.jpg' %}");
             background-repeat: no-repeat;
             background-attachment: fixed;
             background-size: cover;
+            color: #333;
         }
-        .main{
-            position: fixed;
-            top: 140px;
-            left: 410px;
-            width: 550px;
-            background-color:#ffffff;
-            border-radius: 10px;
-            align-items: center;
-            padding: 5%;
+        .nav-panel {
+            background-color: black;
+            padding: 30px;
+            text-align: left;
         }
-        h1{
-            color: #0086b3;
-            font-size: 30px;
+        .nav-panel a {
+            text-decoration: none;
+            color: #fff;
+            padding: 10px 20px;
+            border-radius: 50px;
+            margin-right: 20px;
+            font-size: 18px;
             font-weight: bold;
         }
-        input[type=submit]{
+        .nav-panel a:hover {
+            background-color: #ffa500;
+        }
+        .main {
+            margin: 20px auto;
+            max-width: 700px;
+            background-color: rgba(255, 255, 255, 0.8);
+            border-radius: 30px;
+            padding: 30px;
+            text-align: center;
+        }
+        h1 {
+            color: #0086b3;
+            font-size: 24px;
+            font-weight: bold;
+            margin-bottom: 20px;
+        }
+        input[type="text"],
+        select {
+            padding: 6px;
+            margin: 5px 0;
+            width: 400px;
+            border-radius: 3px;
+            border: 1px solid #ccc;
+            box-sizing: border-box;
+        }
+        input[type="submit"] {
             background-color: #4dc3ff;
-            border: 2px;
-            color: white;
-            padding: 8px 16px;
+            border: none;
+            color: #fff;
+            padding: 10px 20px;
+            font-size: 16px;
             cursor: pointer;
+            border-radius: 5px;
             margin-top: 15px;
+            transition: background-color 0.3s ease;
+        }
+        input[type="submit"]:hover {
+            background-color: #2f8cff;
+        }
+        .button {
+            background-color: #4dc3ff;
+            border: none;
+            color: #fff;
+            padding: 10px 20px;
+            font-size: 16px;
+            cursor: pointer;
+            border-radius: 5px;
+            margin-top: 15px;
+            transition: background-color 0.3s ease;
+        }
+        .result {
+            font-size: 24px;
+            font-weight: bold;
+            margin-top: 20px;
+        }
+        #informationTooltip {
+        background-color: #f9f9f9;
+        border: 1px solid #ccc;
+        padding: 5px;
+        position: absolute;
+        z-index: 1;
         }
     </style>
 </head>
+<div class="nav-panel">
+        <a href="{% url 'home' %}">HomePage</a>
+        <a href="{% url 'bmi' %}">Find Your BMI</a>
+    </div>
 <body>
-    <p> This is the Prediction Page</p>
-    <div align = 'center' class='main'>
+    <div class="main">
         <h1>Please enter the below details to predict:</h1>
-        <form action="result">
+        <form action="{% url 'result' %}" method="GET">
             <table>
                 <tr>
+                    <td align="right">Name:</td>
+                    <td align="left">
+                        <input type="text" name="n9" maxlength="50" pattern="[A-Za-z\s]+" title="Please enter text only" value="{{ name }}">
+                        <div id="nameValidationMessage" style="display: none; color: red;">Please enter text only</div>
+    </td>
+                </tr>
+                <tr>
+                    <td align="right">Gender:</td>
+                    <td align="left">
+                        <select name="gender">
+                            <option value="male">Male</option>
+                            <option value="female">Female</option>
+                            <option value="other">Other</option>
+                        </select>
+                    </td>
+                </tr>
+                <tr>
+                    <td align="right">Physical Activity:</td>
+                    <td align="left">
+                        <input type="text" name="n11" maxlength="10" placeholder="Enter number of years of physical activity">
+                        <button onmouseover="showInformation()" onmouseout="hideInformation()">ℹ️</button>
+                        <span id="informationTooltip" style="display: none;">Please enter the number of years of physical activity. If none, enter 0.</span>
+                    </td>
+                </tr>
+                <tr>
+                    <td align="right">Educational Level:</td>
+                    <td align="left">
+                        <select name="Educational Level">
+                            <option value="No Formal Education">No Formal Education</option>
+                            <option value="Primary Education">Primary Education</option>
+                            <option value="Secondary Education">Secondary Education</option>
+                            <option value="Vocational Education">Vocational Education</option>
+                            <option value="Bachelor's Degree" >Bachelor's Degree</option>
+                            <option value="Master' Degree">Master' Degree</option>
+                            <option value="Doctrate or Higher">Doctrate or Higher</option>
+                        </select>
+                    </td>
+                </tr>
+                <tr>
+                    <td align="right">Smoking History:</td>
+                    <td align="left">
+                        <input type="text" name="n12" maxlength="3" placeholder="Enter number of smoking years" onkeypress="return isNumber(event)" oninput="checkInput()">
+                        <span id="errorMessage" style="color: red; display: none;">Please enter only numeric values.</span>
+                    </td>
+                </tr>
+                <tr>
                     <td align="right">Pregnancies:</td>
-                    <td align="left"><input type="text" name="n1"</td>
+                    <td align="left">
+                        <input type="text" name="n1" maxlength="10" placeholder="Enter number of Pregancies. If male, enter 0">
+                    </td>
                 </tr>
                 <tr>
                     <td align="right">Glucose:</td>
-                    <td align="left"><input type="text" name="n2"</td>
+                    <td align="left"><input type="text" name="n2" maxlength="10"/td>
                 </tr>
                 <tr>
                     <td align="right">Blood Pressure:</td>
-                    <td align="left"><input type="text" name="n3"</td>
+                    <td align="left"><input type="text" name="n3" maxlength="10"</td>
                 </tr>
                 <tr>
                     <td align="right">Skin Thickness:</td>
-                    <td align="left"><input type="text" name="n4"</td>
+                    <td align="left"><input type="text" name="n4" maxlength="10"</td>
                 </tr>
                 <tr>
                     <td align="right">Insuline:</td>
-                    <td align="left"><input type="text" name="n5"</td>
+                    <td align="left"><input type="text" name="n5" maxlength="10"</td>
                 </tr>
                 <tr>
-                    <td align="right">BMI:</td>
-                    <td align="left"><input type="text" name="n6"</td>
+                    <td align="right">BMI (Body Mass Index):</td>
+                    <td align="left"><input type="text" name="n6" placeholder="Find your BMI using (Find your BMI) from the top menu"</td>
                 </tr>
                 <tr>
                     <td align="right">Diabetes Pedigree Function:</td>
-                    <td align="left"><input type="text" name="n7"</td>
+                    <td align="left"><input type="text" name="n7" maxlength="10"</td>
                 </tr>
                 <tr>
                     <td align="right">Age:</td>
-                    <td align="left"><input type="text" name="n8"</td>
-                </tr>
+                    <td align="left"><input type="text" name="n8" maxlength="3"></td>
+</tr>
             </table>
-            <input type="submit"><br>
-        </form><br><br>
-        Result : {{result2}}
+            <input type="submit">
+        </form>
+        <form action="{% url 'predresult' %}" method="GET">
+    <input type="submit" value="Print Submission Report">
+        </form>
+        <div class="result">Result: {{result2}}</div>
     </div>
+<script>
+    document.querySelector('input[name="n9"]').addEventListener('input', function(event) {
+        var inputField = event.target;
+        var validationMessage = document.getElementById('nameValidationMessage');
+        if (!inputField.checkValidity()) {
+            validationMessage.style.display = 'block';
+        } else {
+            validationMessage.style.display = 'none';
+        }
+    });
+</script>
+<script>
+    function showInformation() {
+    var tooltip = document.getElementById("informationTooltip");
+    tooltip.style.display = "inline";
+}
+
+function hideInformation() {
+    var tooltip = document.getElementById("informationTooltip");
+    tooltip.style.display = "none";
+}
+</script>
+<script>
+function checkInput() {
+    var input = document.getElementsByName("n12")[0].value;
+    var errorMessage = document.getElementById("errorMessage");
+    if (isNaN(input)) {
+        errorMessage.style.display = "inline";
+    } else {
+        errorMessage.style.display = "none";
+    }
+}
+</script>
+<script>
+    document.querySelectorAll('input[type="text"]').forEach(function(inputField) {
+        inputField.addEventListener('input', function(event) {
+            var inputValue = event.target.value;
+            var fieldName = event.target.getAttribute('name');
+            var isValid = /^\d*\.?\d*$/.test(inputValue);
+            var validationMessage = event.target.parentNode.querySelector('.validation-message');
+
+            if (fieldName && fieldName.match(/^n[1-8]$/) && !isValid && !validationMessage) {
+                validationMessage = document.createElement('span');
+                validationMessage.textContent = 'Please enter only numeric values.';
+                validationMessage.className = 'validation-message';
+                validationMessage.style.color = 'red';
+                event.target.parentNode.appendChild(validationMessage);
+            } else if (isValid && validationMessage) {
+                validationMessage.remove();
+            }
+        });
+    });
+</script>
 </body>
 </html>

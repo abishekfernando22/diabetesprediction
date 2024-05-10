@@ -19,7 +19,13 @@ from . import views
 
 urlpatterns = [
     path("admin/", admin.site.urls),
-    path("", views.home),
+    path('', views.home, name='home'),
     path("predict/", views.predict),
-    path("predict/result", views.result)
+    path("predict/result/", views.result, name='result'),
+    path('predresult/', views.predresult, name='predresult'),
+    path('bmi/', views.bmi, name='bmi'),
+    path('predict/', views.predict, name='predict'),
+    path('bmi/', views.bmi, name='bmi'),
+    path('', views.predict, name='predict'),
+    path('predresult/', views.predresult, name='predresult'),
 ]

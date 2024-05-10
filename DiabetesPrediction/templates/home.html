@@ -5,47 +5,71 @@
 <head>
     <meta charset="UTF-8">
     <title>Home</title>
-    <style type = text/css>
-        div{
-            color:white;
-        }
-        h1{
-            color: 'white';
-            font-family: arial, sans-serif;
-            font-size: 60px;
-            font-weight: bold;
-            margin-top: 200px;
-        }
-        h2{
-            color: 'white';
-            font-family: arial, sans-serif;
-            font-size: 15px;
-            font-weight: bold;
-            margin-top: 400px;
-        }
-        body{
-        background-image:url("{% static '/DiabetesPrediction/images/img1.jpg'%}");
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+            font-family: Arial, sans-serif;
+            background-image: url("{% static '/DiabetesPrediction/images/img1.jpg'%}");
             background-repeat: no-repeat;
             background-attachment: fixed;
             background-size: cover;
         }
-        input[type=submit]{
-            background-color: #4dc3ff;
-            border: 2px;
-            color: white;
-            padding: 16px 32px;
-            cursor: pointer;
-            margin-top: 15px;
+        .overlay {
+            background: rgba(0, 0, 0, 0.5);
+            width: 100%;
+            height: 100%;
+            position: absolute;
+            top: 0;
+            left: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            flex-direction: column;
+            text-align: center;
         }
+        .container {
+            max-width: 800px;
+            margin: auto;
+        }
+        .title {
+            color: white;
+            font-size: 48px;
+            font-weight: bold;
+            margin-bottom: 30px;
+        }
+        .subtitle {
+            color: white;
+            font-size: 18px;
+            margin-bottom: 50px;
+        }
+        .btn {
+    background-color: #f0f0f0;
+    border: none;
+    color: #333;
+    padding: 20px 40px;
+    font-size: 20px;
+    cursor: pointer;
+    transition: background-color 0.3s ease, color 0.3s ease;
+}
+
+.btn:hover {
+    background-color: #ffd700;
+    color: #333;
+}
+
     </style>
 </head>
 <body>
-    <div align = 'center'>
-        <h1> WELCOME TO DIABETES PREDICTION SYSTEM</h1>
-        <form action = "predict">
-            <input type = "submit" value = "Click to Start Prediction">
-        </form>
-
+    <div class="overlay">
+        <div class="container">
+            <h1 class="title">WELCOME TO DIABETES PREDICTION SYSTEM</h1>
+            <p class="subtitle">Get your Risk! In a Click! </p>
+            <form action="predict">
+                <button class="btn">Click to Start Prediction</button>
+            </form>
+        </div>
     </div>
 </body>
 </html>
+
